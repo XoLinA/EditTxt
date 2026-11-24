@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink Notes Editor</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #fff0f5;
+            font-family: 'Trebuchet MS', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .editor {
+            width: 850px;
+            max-width: 100%;
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 15px 45px rgba(190, 91, 133, 0.13);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #b94e7b;
+            font-size: 28px;
+            margin: 0;
+        }
+
+        .header p {
+            color: #bd91a5;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #ffe0ec;
+            color: #c44e80;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .toolbar {
+            background: #fff4f8;
+            border: 1px solid #f8dce8;
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 20px;
+        }
+
+        button,
+        select,
+        input {
+            border: none;
+            outline: none;
+            border-radius: 9px;
+            padding: 10px 12px;
+            background: white;
+            color: #a54c72;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        button {
+            min-width: 38px;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #f9c8dc;
+            transform: translateY(-2px);
+        }
+
+        select {
+            border: 1px solid #f4d3e0;
+        }
+
+        input[type="color"] {
+            width: 42px;
+            height: 38px;
+            padding: 4px;
+        }
+
+        .separator {
+            width: 1px;
+            height: 27px;
+            background: #edc7d7;
+            margin: 0 3px;
+        }
+
+        .editor-area {
+            background: #fffafd;
+            border: 2px solid #f6dce7;
+            border-radius: 16px;
+            padding: 25px;
+            min-height: 320px;
+        }
+
+        #text {
+            min-height: 270px;
+            outline: none;
+            color: #604653;
+            font-size: 17px;
+            line-height: 1.8;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            color: #c293a8;
+            font-size: 13px;
+        }
+
+        .clear-btn {
+            background: #ffe4ee;
+            color: #bc527e;
+            padding: 10px 18px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .editor {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .toolbar {
+                gap: 7px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="editor">
+
+        <div class="header">
+            <div>
+                <h1>Pink Notes ♡</h1>
+                <p>Your little space for beautiful words</p>
+            </div>
+        </div>
+
+        <div class="toolbar">
+
+            <button data-command="bold" title="Bold">B</button>
+            <button data-command="italic" title="Italic"><i>I</i></button>
+            <button data-command="underline" title="Underline"><u>U</u></button>
+
+            <div class="separator"></div>
+
+            <button data-case="upper" title="Uppercase">AA</button>
+            <button data-case="lower" title="Lowercase">aa</button>
+
+            <div class="separator"></div>
+
+            <input type="color" id="color" value="#c45b85" title="Text color">
+
+            <select id="size" title="Font size">
+                <option value="14px">14 px</option>
+                <option value="17px" selected>17 px</option>
+                <option value="20px">20 px</option>
+                <option value="24px">24 px</option>
+                <option value="30px">30 px</option>
+            </select>
+
+            <select id="font" title="Font family">
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Courier New">Courier New</option>
+            </select>
+
+        </div>
+
+        <div class="editor-area">
+            <div id="text" contenteditable="true">
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="clear-btn" id="clear">Clear text</button>
+        </div>
+
+    </div>
+
+    <script>
+        const toolbar = document.querySelector(".toolbar");
+        const editor = document.querySelector("#text");
+
+        toolbar.addEventListener("click", function (event) {
+
+            const button = event.target.closest("button");
+            if (!button) return;
+
+            const command = button.dataset.command;
+            const textCase = button.dataset.case;
+
+            if (command) {
+                document.execCommand(command);
+            }
+
+            if (textCase === "upper") {
+                editor.style.textTransform = "uppercase";
+            }
+
+            if (textCase === "lower") {
+                editor.style.textTransform = "lowercase";
+            }
+
+        });
+
+        document.querySelector("#color").addEventListener("input", function () {
+            document.execCommand("foreColor", false, this.value);
+        });
+
+        document.querySelector("#size").addEventListener("change", function () {
+
+            document.execCommand("fontSize", false, "7");
+            editor.querySelectorAll("font[size='7']").forEach(function (element) {
+                element.removeAttribute("size");
+                element.style.fontSize = this.value;
+            }.bind(this));
+
+        });
+
+        document.querySelector("#font").addEventListener("change", function () {
+            document.execCommand("fontName", false, this.value);
+        });
+
+        document.querySelector("#clear").addEventListener("click", function () {
+            editor.innerHTML = "";
+        });
+
+    </script>
+
+</body>
+
+</html>
